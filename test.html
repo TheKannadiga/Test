@@ -86,8 +86,9 @@
     </style>
 </head>
 <body>
-    <div class="content">
+    <div class="content" id="content">
         <h1>Gussa ho kya mujpe??</h1>
+        <img src="https://tenor.com/en-GB/view/dudu-dudu-run-dudu-bear-dudu-return-dudu-funny-gif-12382881866439180676.gif"  />
         <button id="yesBtn" class="btn">Yes</button>
         <button id="noBtn" class="btn">No</button>
         <p id="message" class="hidden">Just kidding! Here's something for you!</p>
@@ -104,9 +105,6 @@
     </div>
 
     <script>
-        // Audio files for button click sound
-        const clickSound = new Audio('click-sound.mp3');
-
         // Interaction logic
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
@@ -115,40 +113,59 @@
         const quiz = document.getElementById('quiz');
         const options = document.querySelectorAll('.option');
         const responseMessage = document.getElementById('responseMessage');
+        const content = document.getElementById('content');
 
         let yesClicks = 0;
 
         yesBtn.addEventListener('click', () => {
             yesClicks++;
-            yesBtn.style.transform = `scale(${1 - yesClicks * 0.2})`;
+            const x = Math.floor(Math.random() * (window.innerWidth - yesBtn.offsetWidth));
+            const y = Math.floor(Math.random() * (window.innerHeight - yesBtn.offsetHeight));
+            yesBtn.style.position = 'absolute';
+            yesBtn.style.left = `${x}px`;
+            yesBtn.style.top = `${y}px`;
             yesBtn.classList.add('btn-clicked');
-            clickSound.play(); // Play click sound
             setTimeout(() => {
                 yesBtn.classList.remove('btn-clicked');
             }, 500);
-            if (yesClicks >= 3) {
-                yesBtn.classList.add('hidden');
-                easterEgg.style.display = 'block';
-            }
         });
 
         noBtn.addEventListener('click', () => {
-            noBtn.textContent = 'Lock kiya jaye?!!🫣';
-            noBtn.disabled = true;
-            clickSound.play(); // Play click sound
-            setTimeout(() => {
-                message.classList.remove('hidden');
-                setTimeout(() => {
-                    quiz.classList.remove('hidden');
-                }, 500); // Delay showing quiz
-            }, 500); // Delay the message display by 0.5 seconds
-        });
+            content.innerHTML = `
+                <h1>Secret Message</h1>
+                <img src="https://tenor.com/en-GB/view/bubu-bubu-dudu-dudu-dudu-fudu-bear-gif-3094473923557265292.gif" />
+                <button id="showPlaylist" class="btn">Click here</button>
+            `;
+            const showPlaylist = document.getElementById('showPlaylist');
+            showPlaylist.addEventListener('click', () => {
+                content.innerHTML = `
+                    <h1>Playlist Page</h1>
+                    <p>Enjoy this playlist!</p>
+                    <a href="https://open.spotify.com/playlist/1m67f89htwifyLiUQXctG3?si=26FfyLaVRaWPBbeetmkLjg" target="_blank" class="btn">Open Playlist</a>
+                    <div id="quiz">
+                        <div class="question">Kesa laga?</div>
+                        <div class="options">
+                            <button class="option" data-response="Bahut faltu tha">Bahut faltu tha</button>
+                            <button class="option" data-response="Bekar isann">Bekar isann</button>
+                            <button class="option" data-response="Aachaa lagiii 🐣">Aachaa lagiii 🐣</button>
+                        </div>
+                    </div>
+                    <p id="responseMessage" class="hidden">Thank you for your response!</p>
+                `;
 
-        options.forEach(option => {
-            option.addEventListener('click', () => {
-                const response = option.getAttribute('data-response');
-                responseMessage.textContent = `Your response: ${response}`;
-                responseMessage.classList.remove('hidden');
+                const options = document.querySelectorAll('.option');
+                const responseMessage = document.getElementById('responseMessage');
+
+                options.forEach(option => {
+                    option.addEventListener('click', () => {
+                        const response = option.getAttribute('data-response');
+                        if (response === 'Aachaa lagiii 🐣') {
+                            alert("Correct! Aachaa lagiii 🐣");
+                        } else {
+                            alert("Wrong answer! Try again.");
+                        }
+                    });
+                });
             });
         });
     </script>
