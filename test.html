@@ -3,54 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Web Page</title>
+    <title>Surprise Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background: linear-gradient(to bottom, #87CEEB, #4682B4, #2E8B57, #8B4513); /* Himalaya gradient */
-            height: 100vh;
             margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #ADD8E6, #FFFFFF); /* Snow blue to white gradient */
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+            color: black;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            height: 100vh;
+        }
+        .btn {
+            font-size: 24px;
+            padding: 20px 40px;
+            margin: 10px;
+            background-color: #FFFFFF;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #FFD700;
         }
         .hidden {
             display: none;
         }
+        .btn-clicked {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        .easter-egg {
+            display: none;
+            margin-top: 20px;
+            font-size: 18px;
+            color: yellow;
+        }
     </style>
 </head>
 <body>
-    <h1>Gussa ho kya mujpe??</h1>
-    <button id="yesBtn">Yes</button>
-    <button id="noBtn">No</button>
+    <div class="content">
+        <h1>Gussa ho kya mujpe??</h1>
+        <button id="yesBtn" class="btn">Yes</button>
+        <button id="noBtn" class="btn">No</button>
+        <p id="message" class="hidden">Just kidding! Here's something for you!</p>
+        <p id="easterEgg" class="easter-egg">You found the Easter egg! Surprise! 🎉</p>
+    </div>
 
-    <audio id="bgMusic" src="https://drive.google.com/uc?export=download&id=1-3uO11oYfu94CG3ETJevv0cAVC69COA0" preload="auto"></audio>
-    
     <script>
-        let yesClicks = 0;
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
-        const bgMusic = document.getElementById('bgMusic');
+        const message = document.getElementById('message');
+        const easterEgg = document.getElementById('easterEgg');
+
+        let yesClicks = 0;
 
         yesBtn.addEventListener('click', () => {
             yesClicks++;
             yesBtn.style.transform = `scale(${1 - yesClicks * 0.2})`;
-            if (yesClicks >= 5) {
+            yesBtn.classList.add('btn-clicked');
+            setTimeout(() => {
+                yesBtn.classList.remove('btn-clicked');
+            }, 500);
+            if (yesClicks >= 3) {
                 yesBtn.classList.add('hidden');
+                easterEgg.style.display = 'block';
             }
         });
 
         noBtn.addEventListener('click', () => {
-            noBtn.textContent = 'Lock kiya jaye ?!!';
-        });
-
-        noBtn.addEventListener('dblclick', () => {
-            bgMusic.play();
+            noBtn.textContent = 'Lock kiya jaye?!!🫣';
+            noBtn.disabled = true;
             setTimeout(() => {
-                window.open('https://open.spotify.com/embed/playlist/1m67f89htwifyLiUQXctG3?si=fWac70BhT1OdrCPz1LaA_Q', '_blank');
-            }, 5000); // Opens in new window after 5 seconds
+                message.classList.remove('hidden');
+                setTimeout(() => {
+                    window.open('https://open.spotify.com/embed/playlist/1m67f89htwifyLiUQXctG3?si=fWac70BhT1OdrCPz1LaA_Q', '_blank');
+                }, 2000); // Delay the playlist opening by 2 seconds
+            }, 500); // Delay the message display by 0.5 seconds
         });
     </script>
 </body>
