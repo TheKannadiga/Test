@@ -54,6 +54,10 @@
             font-size: 18px;
             color: yellow;
         }
+        #quiz {
+            display: none;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -63,6 +67,12 @@
         <button id="noBtn" class="btn">No</button>
         <p id="message" class="hidden">Just kidding! Here's something for you!</p>
         <p id="easterEgg" class="easter-egg">You found the Easter egg! Surprise! 🎉</p>
+        <div id="quiz">
+            <h2>Kesa laga?</h2>
+            <button class="quiz-btn" data-response="Bahut faltu tha">Bahut faltu tha</button>
+            <button class="quiz-btn" data-response="Bekar insaan">Bekar insaan</button>
+            <button class="quiz-btn" data-response="Aachaa lagiii 🐣">Aachaa lagiii 🐣</button>
+        </div>
     </div>
 
     <script>
@@ -70,6 +80,8 @@
         const noBtn = document.getElementById('noBtn');
         const message = document.getElementById('message');
         const easterEgg = document.getElementById('easterEgg');
+        const quiz = document.getElementById('quiz');
+        const quizButtons = document.querySelectorAll('.quiz-btn');
 
         let yesClicks = 0;
 
@@ -93,9 +105,29 @@
                 message.classList.remove('hidden');
                 setTimeout(() => {
                     window.open('https://open.spotify.com/embed/playlist/1m67f89htwifyLiUQXctG3?si=fWac70BhT1OdrCPz1LaA_Q', '_blank');
-                }, 2000); // Delay the playlist opening by 2 seconds
+                    quiz.style.display = 'block';
+                }, 1000); // Open playlist after 1 second
             }, 500); // Delay the message display by 0.5 seconds
         });
+
+        quizButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const response = button.getAttribute('data-response');
+                if (response === "Aachaa lagiii 🐣") {
+                    alert("Correct answer!");
+                } else {
+                    alert("Wrong answer!");
+                }
+                sendResponse(response);
+            });
+        });
+
+        function sendResponse(response) {
+            const email = "your-email@example.com"; // Replace with your email address
+            const subject = "Quiz Response";
+            const body = `Your friend responded with: ${response}`;
+            window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+        }
     </script>
 </body>
 </html>
