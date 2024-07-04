@@ -73,6 +73,7 @@
             <button class="quiz-btn" data-response="Bekar insaan">Bekar insaan</button>
             <button class="quiz-btn" data-response="Aachaa lagiii 🐣">Aachaa lagiii 🐣</button>
         </div>
+        <p id="responseMessage" class="hidden">Thank you for your response!</p>
     </div>
 
     <script>
@@ -82,6 +83,7 @@
         const easterEgg = document.getElementById('easterEgg');
         const quiz = document.getElementById('quiz');
         const quizButtons = document.querySelectorAll('.quiz-btn');
+        const responseMessage = document.getElementById('responseMessage');
 
         let yesClicks = 0;
 
@@ -113,21 +115,10 @@
         quizButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const response = button.getAttribute('data-response');
-                if (response === "Aachaa lagiii 🐣") {
-                    alert("Correct answer!");
-                } else {
-                    alert("Wrong answer!");
-                }
-                sendResponse(response);
+                responseMessage.textContent = `Your response: ${response}`;
+                responseMessage.classList.remove('hidden');
             });
         });
-
-        function sendResponse(response) {
-            const email = "your-email@example.com"; // Replace with your email address
-            const subject = "Quiz Response";
-            const body = `Your friend responded with: ${response}`;
-            window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-        }
     </script>
 </body>
 </html>
