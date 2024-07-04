@@ -55,8 +55,33 @@
             color: yellow;
         }
         #quiz {
-            display: none;
             margin-top: 20px;
+            text-align: left;
+        }
+        .question {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .options {
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+        .option {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #FFFFFF;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+        .option:hover {
+            background-color: #FFD700;
+        }
+        #responseMessage {
+            margin-top: 20px;
+            font-size: 18px;
         }
     </style>
 </head>
@@ -67,22 +92,28 @@
         <button id="noBtn" class="btn">No</button>
         <p id="message" class="hidden">Just kidding! Here's something for you!</p>
         <p id="easterEgg" class="easter-egg">You found the Easter egg! Surprise! 🎉</p>
-        <div id="quiz">
-            <h2>Kesa laga?</h2>
-            <button class="quiz-btn" data-response="Bahut faltu tha">Bahut faltu tha</button>
-            <button class="quiz-btn" data-response="Bekar insaan">Bekar insaan</button>
-            <button class="quiz-btn" data-response="Aachaa lagiii 🐣">Aachaa lagiii 🐣</button>
+        <div id="quiz" class="hidden">
+            <div class="question">Kesa laga?</div>
+            <div class="options">
+                <button class="option" data-response="Bahut faltu tha">Bahut faltu tha</button>
+                <button class="option" data-response="Bekar isann">Bekar isann</button>
+                <button class="option" data-response="Aachaa lagiii 🐣">Aachaa lagiii 🐣</button>
+            </div>
         </div>
         <p id="responseMessage" class="hidden">Thank you for your response!</p>
     </div>
 
     <script>
+        // Audio files for button click sound
+        const clickSound = new Audio('click-sound.mp3');
+
+        // Interaction logic
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
         const message = document.getElementById('message');
         const easterEgg = document.getElementById('easterEgg');
         const quiz = document.getElementById('quiz');
-        const quizButtons = document.querySelectorAll('.quiz-btn');
+        const options = document.querySelectorAll('.option');
         const responseMessage = document.getElementById('responseMessage');
 
         let yesClicks = 0;
@@ -91,6 +122,7 @@
             yesClicks++;
             yesBtn.style.transform = `scale(${1 - yesClicks * 0.2})`;
             yesBtn.classList.add('btn-clicked');
+            clickSound.play(); // Play click sound
             setTimeout(() => {
                 yesBtn.classList.remove('btn-clicked');
             }, 500);
@@ -103,18 +135,18 @@
         noBtn.addEventListener('click', () => {
             noBtn.textContent = 'Lock kiya jaye?!!🫣';
             noBtn.disabled = true;
+            clickSound.play(); // Play click sound
             setTimeout(() => {
                 message.classList.remove('hidden');
                 setTimeout(() => {
-                    window.open('https://open.spotify.com/embed/playlist/1m67f89htwifyLiUQXctG3?si=fWac70BhT1OdrCPz1LaA_Q', '_blank');
-                    quiz.style.display = 'block';
-                }, 1000); // Open playlist after 1 second
+                    quiz.classList.remove('hidden');
+                }, 500); // Delay showing quiz
             }, 500); // Delay the message display by 0.5 seconds
         });
 
-        quizButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const response = button.getAttribute('data-response');
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                const response = option.getAttribute('data-response');
                 responseMessage.textContent = `Your response: ${response}`;
                 responseMessage.classList.remove('hidden');
             });
